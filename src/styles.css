@@ -80,8 +80,7 @@ button:disabled {
 .sidebar-heading span,
 .metric span,
 .summary-cards span,
-.recap-title span,
-.select-label span {
+.recap-title span {
   color: var(--muted);
   display: block;
   font-size: 0.76rem;
@@ -105,23 +104,10 @@ button:disabled {
   gap: 9px;
 }
 
-.select-label {
-  display: grid;
-  gap: 4px;
-}
-
-.select-label select {
-  height: 38px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--panel);
-  color: var(--text);
-  padding: 0 34px 0 12px;
-}
-
 .icon-button,
 .primary-button,
 .recommendation-card,
+.analyze-button,
 .candidate-list button,
 .key,
 .tile {
@@ -314,6 +300,29 @@ button:disabled {
   text-transform: uppercase;
 }
 
+.guess-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(100%, 430px);
+}
+
+.guess-input-row .guess-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.analysis-link {
+  color: var(--blue);
+  font-weight: 900;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.analysis-link:hover {
+  text-decoration: underline;
+}
+
 .entry-panel {
   display: grid;
   gap: 14px;
@@ -420,10 +429,6 @@ button:disabled {
 .candidate-browser {
   padding: 14px;
   box-shadow: none;
-}
-
-.recommendation-section.primary-section {
-  border-color: var(--blue);
 }
 
 .recommendation-section h2,
@@ -562,6 +567,25 @@ button:disabled {
   color: var(--text);
 }
 
+.analyze-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 36px;
+  color: var(--blue);
+  font-weight: 900;
+}
+
+.analysis-card {
+  display: grid;
+  gap: 9px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px;
+  background: var(--panel-soft);
+}
+
 .candidate-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(74px, 1fr));
@@ -613,6 +637,13 @@ button:disabled {
   font-size: 1.02rem;
 }
 
+.help-tip {
+  display: inline-flex;
+  margin-left: 5px;
+  color: var(--blue);
+  vertical-align: text-bottom;
+}
+
 .recap-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -660,30 +691,6 @@ button:disabled {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-[data-high-contrast="true"] {
-  --green: #007a3d;
-  --yellow: #f4c400;
-  --gray: #2f343d;
-  --blue: #004fc4;
-  --border: #8792a2;
-}
-
-[data-high-contrast="true"] .tile-yellow {
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.32) 0 5px,
-    transparent 5px 10px
-  );
-}
-
-[data-high-contrast="true"] .tile-green {
-  background-image: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.26) 0 50%,
-    transparent 50%
-  );
 }
 
 @media (max-width: 1180px) {
@@ -744,7 +751,6 @@ button:disabled {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .select-label,
   .text-button,
   .toolbar .icon-button {
     width: 100%;

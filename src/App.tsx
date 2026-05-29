@@ -3,7 +3,6 @@ import {
   Eye,
   EyeOff,
   RefreshCcw,
-  ShieldCheck,
   Sparkles,
   Undo2,
 } from "lucide-react";
@@ -22,7 +21,7 @@ import {
   replayCandidates,
   scoreSingleGuess,
 } from "./solver/scoring";
-import type { GuessResult, PersistedGame, StrategyMode, TileState } from "./solver/types";
+import type { GuessResult, PersistedGame, TileState } from "./solver/types";
 import {
   ALLOWED_SET,
   ANSWER_SET,
@@ -39,9 +38,7 @@ const RecapDashboard = lazy(() =>
 );
 
 const DEFAULT_SETTINGS = {
-  strategy: "balanced" as StrategyMode,
   spoilerSafe: false,
-  highContrast: false,
 };
 
 function normalizeWord(value: string) {
@@ -87,14 +84,8 @@ function App() {
   const [history, setHistory] = useState<GuessResult[]>(restored?.guesses ?? []);
   const [currentWord, setCurrentWord] = useState("");
   const [currentPattern, setCurrentPattern] = useState<TileState[]>(EMPTY_PATTERN);
-  const [strategy, setStrategy] = useState<StrategyMode>(
-    restored?.settings.strategy ?? DEFAULT_SETTINGS.strategy,
-  );
   const [spoilerSafe, setSpoilerSafe] = useState(
     restored?.settings.spoilerSafe ?? DEFAULT_SETTINGS.spoilerSafe,
-  );
-  const [highContrast, setHighContrast] = useState(
-    restored?.settings.highContrast ?? DEFAULT_SETTINGS.highContrast,
   );
 
   const candidates = useMemo(
@@ -115,13 +106,11 @@ function App() {
     const persisted: PersistedGame = {
       guesses: history,
       settings: {
-        strategy,
         spoilerSafe,
-        highContrast,
       },
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(persisted));
-  }, [history, strategy, spoilerSafe, highContrast]);
+  }, [history, spoilerSafe]);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -221,7 +210,7 @@ function App() {
   const statusLastBits = lastGuess?.bitsGained ?? 0;
 
   return (
-    <div className="app" data-high-contrast={highContrast}>
+    <div className="app">
       <header className="topbar">
         <div className="brand-block">
           <Sparkles size={22} aria-hidden="true" />
@@ -232,20 +221,6 @@ function App() {
         </div>
 
         <div className="toolbar" aria-label="Game controls">
-          <label className="select-label">
-            <span>Strategy</span>
-            <select
-              value={strategy}
-              onChange={(event) => setStrategy(event.target.value as StrategyMode)}
-            >
-              <option value="balanced">Balanced</option>
-              <option value="solve">Aggressive Solve</option>
-              <option value="information">Information First</option>
-              <option value="hardMode">Hard Mode</option>
-              <option value="minimax">Minimax</option>
-            </select>
-          </label>
-
           <button
             className="icon-button text-button"
             type="button"
@@ -259,17 +234,6 @@ function App() {
               <Eye size={17} aria-hidden="true" />
             )}
             Spoilers
-          </button>
-
-          <button
-            className="icon-button text-button"
-            type="button"
-            onClick={() => setHighContrast((value) => !value)}
-            aria-label={highContrast ? "Disable high contrast" : "Enable high contrast"}
-            title={highContrast ? "Disable high contrast" : "Enable high contrast"}
-          >
-            <ShieldCheck size={17} aria-hidden="true" />
-            Contrast
           </button>
 
           <button
@@ -313,6 +277,7 @@ function App() {
               onTileCycle={cycleTile}
               onWordChange={setWord}
               disabled={isComplete}
+              showAnalysisLink={isComplete}
             />
 
             <div className="entry-panel">
@@ -355,13 +320,14 @@ function App() {
         <div className="side-column">
           <RecommendationSidebar
             workerState={workerState}
-            strategy={strategy}
+            candidateCount={candidates.length}
             spoilerSafe={spoilerSafe}
             onPickWord={setWord}
           />
 
           <CandidateBrowser
             candidates={candidates}
+            history={history}
             spoilerSafe={spoilerSafe}
             onPickWord={setWord}
           />

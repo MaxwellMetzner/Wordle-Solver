@@ -1,12 +1,5 @@
 export type TileState = "gray" | "yellow" | "green";
 
-export type StrategyMode =
-  | "balanced"
-  | "solve"
-  | "information"
-  | "hardMode"
-  | "minimax";
-
 export type RecommendationCategory =
   | "solve"
   | "information"
@@ -57,6 +50,7 @@ export type ScoreResult = {
   requestId: number;
   signature: string;
   recommendations: Recommendation[];
+  candidateOptions: GuessScore[];
   summary: ScoreSummary;
 };
 
@@ -91,8 +85,6 @@ export type SolverWorkerResponse =
 export type PersistedGame = {
   guesses: GuessResult[];
   settings: {
-    strategy: StrategyMode;
     spoilerSafe: boolean;
-    highContrast: boolean;
   };
 };

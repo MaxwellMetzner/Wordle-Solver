@@ -1,4 +1,4 @@
-import { Clipboard, LineChart as LineChartIcon } from "lucide-react";
+import { HelpCircle, LineChart as LineChartIcon } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -23,6 +23,14 @@ function formatBits(value: number) {
 
 function formatPercent(value: number) {
   return `${value.toFixed(1)}%`;
+}
+
+function HelpTip({ label }: { label: string }) {
+  return (
+    <span className="help-tip" title={label} aria-label={label}>
+      <HelpCircle size={14} aria-hidden="true" />
+    </span>
+  );
 }
 
 export function RecapDashboard({ history }: RecapDashboardProps) {
@@ -56,36 +64,14 @@ export function RecapDashboard({ history }: RecapDashboardProps) {
     efficiency: Number(guess.efficiency.toFixed(1)),
   }));
 
-  const shareText = [
-    "Wordle Solver Recap",
-    `Solved in ${history.length} guesses`,
-    history
-      .map((guess, index) =>
-        index === 0
-          ? `${guess.candidatesBefore} -> ${guess.candidatesAfter}`
-          : `${guess.candidatesAfter}`,
-      )
-      .join(" -> "),
-    `Total information gained: ${totalBits.toFixed(2)} bits`,
-    `Average efficiency: ${averageEfficiency.toFixed(1)}%`,
-  ].join("\n");
-
-  async function copyShareText() {
-    await navigator.clipboard?.writeText(shareText);
-  }
-
   return (
-    <section className="recap" aria-label="End of game recap">
+    <section id="game-recap" className="recap" aria-label="End of game recap">
       <div className="recap-title">
         <LineChartIcon size={22} aria-hidden="true" />
         <div>
           <span>Game Recap</span>
           <h2>Solved in {history.length} guesses</h2>
         </div>
-        <button type="button" className="icon-button text-button" onClick={copyShareText}>
-          <Clipboard size={17} aria-hidden="true" />
-          Copy recap
-        </button>
       </div>
 
       <div className="summary-cards">
@@ -96,11 +82,17 @@ export function RecapDashboard({ history }: RecapDashboardProps) {
           </strong>
         </article>
         <article>
-          <span>Total bits gained</span>
+          <span>
+            Total bits gained
+            <HelpTip label="Bits measure how much uncertainty the guesses removed. Higher is better." />
+          </span>
           <strong>{formatBits(totalBits)}</strong>
         </article>
         <article>
-          <span>Average efficiency</span>
+          <span>
+            Average efficiency
+            <HelpTip label="Efficiency compares actual narrowing against the best expected information guess available at that step." />
+          </span>
           <strong>{formatPercent(averageEfficiency)}</strong>
         </article>
         <article>
@@ -142,7 +134,10 @@ export function RecapDashboard({ history }: RecapDashboardProps) {
         </article>
 
         <article className="chart-panel">
-          <h3>Actual vs Optimal Bits</h3>
+          <h3>
+            Actual vs Optimal Bits
+            <HelpTip label="Actual bits are what your feedback removed. Optimal bits are the best expected information available before that guess." />
+          </h3>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={bitsData} margin={{ top: 12, right: 18, left: 8, bottom: 8 }}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -161,9 +156,15 @@ export function RecapDashboard({ history }: RecapDashboardProps) {
         <div className="timeline-row timeline-head" role="row">
           <span role="columnheader">Guess</span>
           <span role="columnheader">Candidates</span>
-          <span role="columnheader">Bits</span>
+          <span role="columnheader">
+            Bits
+            <HelpTip label="Information gained from the submitted feedback pattern." />
+          </span>
           <span role="columnheader">Best word then</span>
-          <span role="columnheader">Efficiency</span>
+          <span role="columnheader">
+            Efficiency
+            <HelpTip label="Actual bits divided by the best expected bits available before that guess." />
+          </span>
         </div>
         {history.map((guess, index) => (
           <div className="timeline-row" role="row" key={`${guess.word}-${index}`}>

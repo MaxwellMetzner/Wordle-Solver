@@ -115,7 +115,7 @@ export function useSolverWorker(
       signature,
       candidateIndexes,
       history,
-      topN: 5,
+      topN: 2,
     };
 
     setState((current) => ({

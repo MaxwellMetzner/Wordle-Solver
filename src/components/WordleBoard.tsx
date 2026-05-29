@@ -7,6 +7,7 @@ type WordleBoardProps = {
   onTileCycle: (index: number) => void;
   onWordChange: (word: string) => void;
   disabled: boolean;
+  showAnalysisLink: boolean;
 };
 
 const STATE_LABELS: Record<TileState, string> = {
@@ -26,6 +27,7 @@ export function WordleBoard({
   onTileCycle,
   onWordChange,
   disabled,
+  showAnalysisLink,
 }: WordleBoardProps) {
   const rows = Array.from({ length: 6 }, (_, rowIndex) => {
     if (rowIndex < history.length) {
@@ -88,17 +90,24 @@ export function WordleBoard({
       <label className="guess-input-label" htmlFor="guess-input">
         Current guess
       </label>
-      <input
-        id="guess-input"
-        className="guess-input"
-        value={currentWord.toUpperCase()}
-        onChange={(event) => onWordChange(normalizeInput(event.target.value))}
-        maxLength={5}
-        autoComplete="off"
-        spellCheck={false}
-        inputMode="text"
-        disabled={disabled}
-      />
+      <div className="guess-input-row">
+        <input
+          id="guess-input"
+          className="guess-input"
+          value={currentWord.toUpperCase()}
+          onChange={(event) => onWordChange(normalizeInput(event.target.value))}
+          maxLength={5}
+          autoComplete="off"
+          spellCheck={false}
+          inputMode="text"
+          disabled={disabled}
+        />
+        {showAnalysisLink ? (
+          <a className="analysis-link" href="#game-recap">
+            See analysis
+          </a>
+        ) : null}
+      </div>
     </section>
   );
 }

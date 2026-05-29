@@ -12,7 +12,7 @@ import type {
 import { ALLOWED_GUESSES, ANSWER_INDEX_BY_WORD, SOLUTION_WORDS } from "./wordLists";
 
 const PATTERN_COUNT = 243;
-const TOP_N_DEFAULT = 5;
+const TOP_N_DEFAULT = 2;
 const POWERS_OF_THREE = [1, 3, 9, 27, 81] as const;
 const LETTER_COUNTS = new Int8Array(26);
 
@@ -248,6 +248,13 @@ async function scoreRequest(request: SolverWorkerRequest) {
       b.expectedBits - a.expectedBits ||
       a.expectedRemaining - b.expectedRemaining,
   );
+  const scoresByWord = new Map(scores.map((score) => [score.word, score]));
+  const candidateOptions =
+    candidateCount <= 5
+      ? request.candidateIndexes
+          .map((index) => scoresByWord.get(SOLUTION_WORDS[index]))
+          .filter((score): score is GuessScore => Boolean(score))
+      : [];
 
   const recommendations = [
     ...toRecommendations(bySolve, "solve", topN),
@@ -263,6 +270,7 @@ async function scoreRequest(request: SolverWorkerRequest) {
       requestId: request.requestId,
       signature: request.signature,
       recommendations,
+      candidateOptions,
       summary: {
         candidateCount,
         bestExpectedBits: byInformation[0]?.expectedBits ?? 0,
