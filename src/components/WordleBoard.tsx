@@ -53,34 +53,36 @@ export function WordleBoard({
 
   return (
     <section className="board-panel" aria-label="Wordle board">
-      <div className="wordle-grid" role="grid" aria-rowcount={6} aria-colcount={5}>
-        {rows.map((row, rowIndex) =>
-          Array.from({ length: 5 }, (_, columnIndex) => {
-            const letter = row.word[columnIndex] ?? "";
-            const state = row.pattern[columnIndex];
-            const isCurrent = row.type === "current";
-            const ariaLabel = `Row ${rowIndex + 1}, tile ${columnIndex + 1}, ${
-              letter ? letter.toUpperCase() : "blank"
-            }, ${STATE_LABELS[state]}`;
+      <div className="wordle-grid" role="grid">
+        {rows.map((row, rowIndex) => (
+          <div key={rowIndex} className="wordle-grid-row" role="row">
+            {Array.from({ length: 5 }, (_, columnIndex) => {
+              const letter = row.word[columnIndex] ?? "";
+              const state = row.pattern[columnIndex];
+              const isCurrent = row.type === "current";
+              const ariaLabel = `Row ${rowIndex + 1}, tile ${columnIndex + 1}, ${
+                letter ? letter.toUpperCase() : "blank"
+              }, ${STATE_LABELS[state]}`;
 
-            return (
-              <button
-                key={`${rowIndex}-${columnIndex}`}
-                className={`tile tile-${state} tile-${row.type}`}
-                type="button"
-                role="gridcell"
-                aria-label={ariaLabel}
-                disabled={!isCurrent}
-                onClick={() => onTileCycle(columnIndex)}
-              >
-                <span className="tile-letter">{letter.toUpperCase()}</span>
-                {letter && row.type !== "empty" ? (
-                  <span className="tile-state-label">{STATE_LABELS[state][0]}</span>
-                ) : null}
-              </button>
-            );
-          }),
-        )}
+              return (
+                <button
+                  key={`${rowIndex}-${columnIndex}`}
+                  className={`tile tile-${state} tile-${row.type}`}
+                  type="button"
+                  role="gridcell"
+                  aria-label={ariaLabel}
+                  disabled={!isCurrent}
+                  onClick={() => onTileCycle(columnIndex)}
+                >
+                  <span className="tile-letter">{letter.toUpperCase()}</span>
+                  {letter && row.type !== "empty" ? (
+                    <span className="tile-state-label">{STATE_LABELS[state][0]}</span>
+                  ) : null}
+                </button>
+              );
+            })}
+          </div>
+        ))}
       </div>
 
       <label className="guess-input-label" htmlFor="guess-input">

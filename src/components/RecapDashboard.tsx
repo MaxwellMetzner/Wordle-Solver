@@ -159,24 +159,24 @@ export function RecapDashboard({ history }: RecapDashboardProps) {
 
       <div className="timeline-table" role="table" aria-label="Guess timeline">
         <div className="timeline-row timeline-head" role="row">
-          <span>Guess</span>
-          <span>Candidates</span>
-          <span>Bits</span>
-          <span>Best word then</span>
-          <span>Efficiency</span>
+          <span role="columnheader">Guess</span>
+          <span role="columnheader">Candidates</span>
+          <span role="columnheader">Bits</span>
+          <span role="columnheader">Best word then</span>
+          <span role="columnheader">Efficiency</span>
         </div>
         {history.map((guess, index) => (
           <div className="timeline-row" role="row" key={`${guess.word}-${index}`}>
-            <span>
+            <span role="cell">
               {index + 1}. {guess.word.toUpperCase()}
             </span>
-            <span>
+            <span role="cell">
               {guess.candidatesBefore.toLocaleString()} {"->"}{" "}
               {guess.candidatesAfter.toLocaleString()}
             </span>
-            <span>{guess.bitsGained.toFixed(2)}</span>
-            <span>{guess.bestAvailableWord.toUpperCase()}</span>
-            <span>{guess.efficiency.toFixed(1)}%</span>
+            <span role="cell">{guess.bitsGained.toFixed(2)}</span>
+            <span role="cell">{guess.bestAvailableWord.toUpperCase()}</span>
+            <span role="cell">{guess.efficiency.toFixed(1)}%</span>
           </div>
         ))}
       </div>

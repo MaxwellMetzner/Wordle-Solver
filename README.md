@@ -30,7 +30,9 @@ npm run build
 
 ## GitHub Pages Deployment
 
-This repo includes `.github/workflows/pages.yml`. Enable GitHub Pages with "GitHub Actions" as the publishing source, then push to `main` or `master`. The workflow builds the Vite app and deploys `dist`.
+This repo includes `.github/workflows/pages.yml`. In GitHub, go to **Settings -> Pages -> Build and deployment** and set **Source** to **GitHub Actions**. Do not use "Deploy from a branch" for this app because the built static files live in `dist`, which is produced by the workflow.
+
+After that, push to `main` or `master`. The workflow installs dependencies with `npm ci`, builds the Vite app, uploads `dist`, and deploys it to Pages.
 
 ## Word Lists
 

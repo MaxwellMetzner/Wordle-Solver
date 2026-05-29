@@ -250,7 +250,8 @@ function App() {
             className="icon-button text-button"
             type="button"
             onClick={() => setSpoilerSafe((value) => !value)}
-            aria-pressed={spoilerSafe}
+            aria-label={spoilerSafe ? "Hide spoilers" : "Show spoilers"}
+            title={spoilerSafe ? "Hide spoilers" : "Show spoilers"}
           >
             {spoilerSafe ? (
               <EyeOff size={17} aria-hidden="true" />
@@ -264,7 +265,8 @@ function App() {
             className="icon-button text-button"
             type="button"
             onClick={() => setHighContrast((value) => !value)}
-            aria-pressed={highContrast}
+            aria-label={highContrast ? "Disable high contrast" : "Enable high contrast"}
+            title={highContrast ? "Disable high contrast" : "Enable high contrast"}
           >
             <ShieldCheck size={17} aria-hidden="true" />
             Contrast

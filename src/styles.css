@@ -227,9 +227,14 @@ button:disabled {
 
 .wordle-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 7px;
   width: min(100%, 430px);
+}
+
+.wordle-grid-row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
 }
 
 .tile {
